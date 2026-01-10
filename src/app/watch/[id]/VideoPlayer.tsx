@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { Download, Share2 } from 'lucide-react';
 import AdSense from '@/components/AdSense';
-import settings from '@/data/settings.json';
 
 export default function VideoPlayer({ video, adsenseCode }: { video: any, adsenseCode: string }) {
 
@@ -14,9 +13,11 @@ export default function VideoPlayer({ video, adsenseCode }: { video: any, adsens
     if (hasAccess) {
         startDownload();
     } else {
-        const code = window.prompt("Enter Download Access Code (25802580):");
-        // Check against static settings code
-        if (code === settings.access_code) {
+        // এখানে আপনার নতুন ইংলিশ লেখাটি সেট করা হয়েছে
+        const code = window.prompt("Need download access, please contact admin, thank you.");
+        
+        // পাসওয়ার্ড আগেরটাই (25802580) রাখা হয়েছে
+        if (code === "25802580") {
             localStorage.setItem('download_access', 'true');
             alert("Access Granted! Download starting...");
             startDownload();
@@ -65,5 +66,4 @@ export default function VideoPlayer({ video, adsenseCode }: { video: any, adsens
         <AdSense code={adsenseCode} />
     </div>
   );
-          }
-               
+}
