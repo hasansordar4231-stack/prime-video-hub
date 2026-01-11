@@ -1,27 +1,34 @@
-import { getVideoById, getVideos, getSettings } from '@/lib/data';
-import VideoPlayer from './VideoPlayer';
+import React from 'react';
+import videos from '@/data/videos.json';
+import { notFound } from 'next/navigation';
 
-// Generate static pages for all videos at build time
+// এই ফাংশনটি এরর দূর করতে সাহায্য করবে
 export async function generateStaticParams() {
-  const videos = getVideos();
   return videos.map((video) => ({
-    id: String(video.id),
+    id: video.id.toString(),
   }));
 }
 
 export default function WatchPage({ params }: { params: { id: string } }) {
-  const video = getVideoById(params.id);
-  const settings = getSettings();
-  const adsenseCode = settings.adsense_code || '';
+  const video = videos.find(v => v.id.toString() === params.id);
 
-  if (!video) return <div className="text-center py-20 text-2xl text-red-500 bg-gray-950 min-h-screen">Video not found</div>;
+  if (!video) {
+    notFound();
+  }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
-        <div className="max-w-6xl mx-auto px-4 py-8">
-            <VideoPlayer video={video} adsenseCode={adsenseCode} />
+    <div className="min-h-screen bg-black text-white p-4 md:p-8">
+      <div className="max-w-5xl mx-auto">
+        <div className="aspect-video w-full bg-gray-900 rounded-xl overflow-hidden shadow-2xl">
+          <iframe 
+            src={video.url.replace("watch?v=", "embed/").replace("shorts/", "embed/")}
+            className="w-full h-full"
+            allowFullScreen
+          ></iframe>
         </div>
+        <h1 className="text-2xl md:text-4xl font-bold mt-6">{video.title}</h1>
+        <p className="text-gray-400 mt-4">{video.description}</p>
+      </div>
     </div>
   );
-}
-
+    }
