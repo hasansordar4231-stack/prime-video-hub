@@ -1,15 +1,26 @@
 "use client";
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Home, PlaySquare, Send, Library, Moon, Menu, Search, Youtube, Facebook } from 'lucide-react'; 
+import { usePathname, useRouter } from 'next/navigation';
+import { Home, PlaySquare, Send, Library, Moon, Menu, Search, Youtube, Facebook, X } from 'lucide-react'; 
 import Script from 'next/script';
 import './globals.css'; 
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  // মেনু আইটেম: মাঝখানের বাটনটি এখন ফেসবুকের জন্য
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+      setIsSearchOpen(false);
+      setSearchQuery("");
+    }
+  };
+
   const navItems = [
     { name: 'Home', path: '/', icon: <Home size={22} /> },
     { name: 'Movies', path: '/category/1', icon: <PlaySquare size={22} /> }, 
@@ -21,44 +32,64 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
-        <Script 
-          src="https://pl28452578.effectivegatecpm.com/dc/c2/db/dcc2db28e11e445bb59424697084fe18.js" 
-          strategy="afterInteractive" 
-        />
+        {/* Adsterra Native Banner Script */}
+        <script async="async" data-cfasync="false" src="https://pl28464189.effectivegatecpm.com/1182f83355f8a97cc17cecf80297bd4e/invoke.js"></script>
       </head>
       <body className="bg-[#0f0f0f] text-white antialiased">
         
-        {/* --- উপরে হেডার: Telegram এবং YouTube লিঙ্কসহ --- */}
         <header className="bg-[#0f0f0f] p-4 border-b border-gray-800 sticky top-0 z-50">
           <div className="flex justify-between items-center max-w-7xl mx-auto">
-            <Menu className="text-gray-400" size={28} />
-            
-            <div className="flex flex-col items-center">
-               <h1 className="text-2xl font-black tracking-tighter text-white italic">
-                 PRIME CLIP <span className="text-red-600 underline decoration-red-600/30">ZONE</span>
-               </h1>
-               
-               <div className="flex gap-4 mt-2">
-                 {/* ওপরের টেলিগ্রাম লিঙ্ক */}
-                 <a href="https://t.me/primeclipzone" target="_blank" className="flex items-center gap-1 text-[11px] font-bold text-blue-400 hover:text-blue-300">
-                    <Send size={14} fill="currentColor" /> Join Telegram
-                 </a>
-                 {/* ওপরের ইউটিউব লিঙ্ক */}
-                 <a href="https://www.youtube.com/@prime-clip-zone" target="_blank" className="flex items-center gap-1 text-[11px] font-bold text-red-600 hover:text-red-500">
-                    <Youtube size={14} fill="currentColor" /> Subscribe
-                 </a>
-               </div>
-            </div>
-
-            <Search className="text-gray-400" size={26} />
+            {!isSearchOpen ? (
+              <>
+                <Menu className="text-gray-400" size={28} />
+                <div className="flex flex-col items-center">
+                   <h1 className="text-2xl font-black tracking-tighter text-white italic">
+                     PRIME CLIP <span className="text-red-600 underline decoration-red-600/30">ZONE</span>
+                   </h1>
+                   <div className="flex gap-4 mt-2">
+                     <a href="https://t.me/primeclipzone" target="_blank" className="flex items-center gap-1 text-[11px] font-bold text-blue-400 hover:text-blue-300">
+                        <Send size={14} fill="currentColor" /> Join Telegram
+                     </a>
+                     <a href="https://www.youtube.com/@prime-clip-zone" target="_blank" className="flex items-center gap-1 text-[11px] font-bold text-red-600 hover:text-red-500">
+                        <Youtube size={14} fill="currentColor" /> Subscribe
+                     </a>
+                   </div>
+                </div>
+                <Search 
+                  className="text-gray-400 cursor-pointer" 
+                  size={26} 
+                  onClick={() => setIsSearchOpen(true)}
+                />
+              </>
+            ) : (
+              <form onSubmit={handleSearch} className="flex items-center w-full gap-2 transition-all duration-300">
+                <input 
+                  autoFocus
+                  type="text" 
+                  placeholder="Search movies or series..." 
+                  className="w-full bg-gray-900 border border-gray-700 rounded-full py-2 px-4 text-white focus:outline-none focus:border-red-600"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <X 
+                  className="text-gray-400 cursor-pointer" 
+                  size={26} 
+                  onClick={() => setIsSearchOpen(false)} 
+                />
+              </form>
+            )}
           </div>
         </header>
 
         <main className="pb-24 min-h-screen">
+          {/* --- বিজ্ঞাপনের ব্যানার (সবার উপরে দেখাবে) --- */}
+          <div className="flex justify-center my-4">
+            <div id="container-1182f83355f8a97cc17cecf80297bd4e"></div>
+          </div>
+
           {children}
         </main>
 
-        {/* --- নিচে বটম বার: মাঝখানে Facebook লিঙ্কসহ --- */}
         <nav className="fixed bottom-0 left-0 right-0 bg-[#121212]/95 backdrop-blur-md border-t border-gray-800 flex justify-around items-end py-3 px-1 z-50 shadow-[0_-5px_20px_rgba(0,0,0,0.5)] md:hidden">
           {navItems.map((item) => (
             item.external ? (
@@ -79,4 +110,4 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </body>
     </html>
   );
-                 }
+                }
