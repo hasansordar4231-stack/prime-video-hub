@@ -4,26 +4,40 @@
 
 :root {
   --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 0, 0, 0;
-  --background-end-rgb: 0, 0, 0;
+  --background-rgb: 15, 15, 15; /* একদম ডার্ক ব্যাকগ্রাউন্ড */
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background-color: rgb(var(--background-rgb));
+  font-family: 'Inter', sans-serif; /* ক্লিন ফন্ট */
+  overflow-x: hidden;
 }
 
-.scrollbar-hide::-webkit-scrollbar {
+/* ৩য় ছবির মতো স্মুথ স্ক্রলিং */
+html {
+  scroll-behavior: smooth;
+}
+
+/* স্ক্রলবার হাইড করার জন্য প্রিমিয়াম ক্লাস */
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
     display: none;
-}
-
-.scrollbar-hide {
+  }
+  .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
 }
 
+/* ১ নম্বর ছবির মতো থাম্বনেল ইফেক্ট */
+.movie-card-shadow {
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+}
+
+/* বটম মেনুর জন্য গ্লাস ইফেক্ট */
+.glass-nav {
+  background: rgba(18, 18, 18, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
