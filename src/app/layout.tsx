@@ -45,3 +45,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 }
+// এই লিংকগুলো এখন আপনার সব বাটনকে সচল করবে
+const navItems = [
+  { name: 'Home', path: '/', icon: <Home size={20} /> },
+  { name: 'Movies', path: '/category/1', icon: <PlaySquare size={20} /> }, // id: 1 মানে Bengali Dubbed
+  { name: 'Telegram', path: 'https://t.me/primeclipzone', icon: <Send size={20} />, external: true },
+  { name: 'Series', path: '/category/2', icon: <Library size={20} /> }, // id: 2 মানে Hindi Dubbed
+  { name: 'Islamic', path: '/category/3', icon: <Ghost size={20} /> }, // id: 3 মানে Islamic
+];
