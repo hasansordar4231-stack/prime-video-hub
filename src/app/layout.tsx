@@ -44,7 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <Send size={14} fill="currentColor" /> Join Telegram
                  </a>
                  {/* ওপরের ইউটিউব লিঙ্ক */}
-                 <a href="https://youtube.com/@primeclipzone" target="_blank" className="flex items-center gap-1 text-[11px] font-bold text-red-600 hover:text-red-500">
+                 <a href="https://www.youtube.com/@prime-clip-zone" target="_blank" className="flex items-center gap-1 text-[11px] font-bold text-red-600 hover:text-red-500">
                     <Youtube size={14} fill="currentColor" /> Subscribe
                  </a>
                </div>
