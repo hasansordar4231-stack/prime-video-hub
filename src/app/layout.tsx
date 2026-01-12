@@ -2,41 +2,49 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, PlaySquare, Send, Library, Ghost } from 'lucide-react'; // আইকন লাইব্রেরি
+import { Home, PlaySquare, Send, Library, Moon } from 'lucide-react'; 
+import Script from 'next/script';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
-  // মেনু আইটেম সেটআপ
+  // প্রফেশনাল মেনু আইটেম (লিঙ্কগুলো ID অনুযায়ী সেট করা হয়েছে)
   const navItems = [
-    { name: 'Home', path: '/', icon: <Home size={20} /> },
-    { name: 'Movies', path: '/category/movies', icon: <PlaySquare size={20} /> },
-    { name: 'Telegram', path: 'https://t.me/primeclipzone', icon: <Send size={20} />, external: true },
-    { name: 'Series', path: '/category/series', icon: <Library size={20} /> },
-    { name: 'Anime', path: '/category/anime', icon: <Ghost size={20} /> },
+    { name: 'Home', path: '/', icon: <Home size={22} /> },
+    { name: 'Movies', path: '/category/1', icon: <PlaySquare size={22} /> }, 
+    { name: 'Telegram', path: 'https://t.me/primeclipzone', icon: <Send size={22} />, external: true },
+    { name: 'Series', path: '/category/2', icon: <Library size={22} /> },
+    { name: 'Islamic', path: '/category/3', icon: <Moon size={22} /> },
   ];
 
   return (
     <html lang="en">
-      <body className="bg-[#0f0f0f] text-white">
-        <main className="pb-20">
+      <head>
+        {/* Adsterra Popunder Ad Code */}
+        <Script 
+          src="https://pl28452578.effectivegatecpm.com/dc/c2/db/dcc2db28e11e445bb59424697084fe18.js" 
+          strategy="afterInteractive" 
+        />
+      </head>
+      <body className="bg-[#0f0f0f] text-white antialiased">
+        <main className="pb-24 min-h-screen">
           {children}
         </main>
 
-        {/* ছবির মতো বটম ন্যাভিগেশন বার */}
-        <nav className="fixed bottom-0 left-0 right-0 bg-[#121212] border-t border-gray-800 flex justify-around items-center py-2 px-1 z-50 shadow-2xl md:hidden">
+        {/* প্রিমিয়াম বটম ন্যাভিগেশন বার */}
+        <nav className="fixed bottom-0 left-0 right-0 bg-[#121212]/95 backdrop-blur-md border-t border-gray-800 flex justify-around items-end py-3 px-1 z-50 shadow-[0_-5px_20px_rgba(0,0,0,0.5)] md:hidden">
           {navItems.map((item) => (
             item.external ? (
-              <a key={item.name} href={item.path} target="_blank" className="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-400">
-                <div className={item.name === 'Telegram' ? 'bg-blue-500 p-2 rounded-full text-white -mt-6 shadow-lg border-4 border-[#0f0f0f]' : ''}>
+              <a key={item.name} href={item.path} target="_blank" className="flex flex-col items-center gap-1 text-gray-400 group">
+                <div className="bg-blue-600 p-3 rounded-full text-white -mt-8 shadow-lg border-4 border-[#0f0f0f] transition-transform group-hover:scale-110">
                   {item.icon}
                 </div>
-                <span className="text-[10px] font-medium">{item.name}</span>
+                <span className="text-[10px] font-bold uppercase tracking-tighter">{item.name}</span>
               </a>
             ) : (
-              <Link key={item.name} href={item.path} className={`flex flex-col items-center gap-1 transition-colors ${pathname === item.path ? 'text-red-500' : 'text-gray-400'}`}>
+              <Link key={item.name} href={item.path} className={`flex flex-col items-center gap-1 transition-all ${pathname === item.path ? 'text-red-500 scale-110' : 'text-gray-400 hover:text-gray-200'}`}>
                 {item.icon}
-                <span className="text-[10px] font-medium">{item.name}</span>
+                <span className="text-[10px] font-bold uppercase tracking-tighter">{item.name}</span>
               </Link>
             )
           ))}
@@ -44,12 +52,4 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </body>
     </html>
   );
-}
-// এই লিংকগুলো এখন আপনার সব বাটনকে সচল করবে
-const navItems = [
-  { name: 'Home', path: '/', icon: <Home size={20} /> },
-  { name: 'Movies', path: '/category/1', icon: <PlaySquare size={20} /> }, // id: 1 মানে Bengali Dubbed
-  { name: 'Telegram', path: 'https://t.me/primeclipzone', icon: <Send size={20} />, external: true },
-  { name: 'Series', path: '/category/2', icon: <Library size={20} /> }, // id: 2 মানে Hindi Dubbed
-  { name: 'Islamic', path: '/category/3', icon: <Ghost size={20} /> }, // id: 3 মানে Islamic
-];
+                }
