@@ -4,11 +4,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, PlaySquare, Send, Library, Moon } from 'lucide-react'; 
 import Script from 'next/script';
+import './globals.css'; // <--- এই লাইনটি অবশ্যই থাকতে হবে ডিজাইন পাওয়ার জন্য
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
-  // প্রফেশনাল মেনু আইটেম (লিঙ্কগুলো ID অনুযায়ী সেট করা হয়েছে)
   const navItems = [
     { name: 'Home', path: '/', icon: <Home size={22} /> },
     { name: 'Movies', path: '/category/1', icon: <PlaySquare size={22} /> }, 
@@ -31,7 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
 
-        {/* প্রিমিয়াম বটম ন্যাভিগেশন বার */}
+        {/* ছবির মতো বটম ন্যাভিগেশন বার */}
         <nav className="fixed bottom-0 left-0 right-0 bg-[#121212]/95 backdrop-blur-md border-t border-gray-800 flex justify-around items-end py-3 px-1 z-50 shadow-[0_-5px_20px_rgba(0,0,0,0.5)] md:hidden">
           {navItems.map((item) => (
             item.external ? (
