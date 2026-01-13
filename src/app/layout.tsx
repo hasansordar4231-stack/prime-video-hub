@@ -13,17 +13,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [password, setPassword] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [slideIndex, setSlideIndex] = useState(0);
 
-  const correctPass = "25802580"; 
+  const banners = [
+    { id: 1, img: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=1000" },
+    { id: 2, img: "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=1000" }
+  ];
 
   useEffect(() => {
     const savedLogin = localStorage.getItem('isLoggedIn');
     if (savedLogin === 'true') setIsLoggedIn(true);
-  }, []);
+    const interval = setInterval(() => {
+      setSlideIndex((prev) => (prev + 1) % banners.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [banners.length]);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === correctPass) {
+    if (password === "25802580") {
       setIsLoggedIn(true);
       localStorage.setItem('isLoggedIn', 'true');
       alert("লগইন সফল! এখন থেকে আজীবন ডাউনলোড করতে পারবেন।");
@@ -39,114 +47,100 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     alert("লগআউট সফল হয়েছে।");
   };
 
-  const navItems = [
-    { name: 'Home', path: '/', icon: <Home size={22} /> },
-    { name: 'Movies', path: '/category/1', icon: <PlaySquare size={22} /> }, 
-    { name: 'FB', path: 'https://www.facebook.com/profile.php?id=61574419225273', icon: <Facebook size={22} />, external: true },
-    { name: 'Series', path: '/category/2', icon: <Library size={22} /> },
-    { name: 'Islamic', path: '/category/3', icon: <Moon size={22} /> },
-  ];
-
   return (
     <html lang="en">
       <head>
         <title>PRIME CLIP ZONE</title>
-        <script async="async" data-cfasync="false" src="https://pl28464189.effectivegatecpm.com/1182f83355f8a97cc17cecf80297bd4e/invoke.js"></script>
+        <script async src="https://pl28464189.effectivegatecpm.com/1182f83355f8a97cc17cecf80297bd4e/invoke.js"></script>
         <script src="https://pl28464315.effectivegatecpm.com/d9/06/de/d906de20c2fa65fcd2b8ae1747a4309b.js"></script>
       </head>
-      <body className="bg-[#0b0b0b] text-white antialiased overflow-x-hidden font-sans">
+      <body className="bg-[#0b0b0b] text-white antialiased overflow-x-hidden">
         
-        <header className="bg-[#0f0f0f] p-4 border-b border-gray-800 sticky top-0 z-50 shadow-lg">
-          <div className="flex justify-between items-center max-w-7xl mx-auto">
-            {!isSearchOpen ? (
-              <>
-                <Menu className="text-gray-300 cursor-pointer" size={28} onClick={() => setIsMenuOpen(true)} />
-                <div className="flex flex-col items-center flex-1">
-                   <h1 className="text-2xl font-black italic tracking-tighter">PRIME CLIP <span className="text-red-600 underline">ZONE</span></h1>
-                   <div className="flex gap-2 mt-2.5">
-                     <a href="https://t.me/primeclipzone" target="_blank" className="flex items-center gap-1.5 bg-[#229ED9] px-3 py-1.5 rounded text-[10px] font-black shadow-md uppercase">
-                        <Send size={12} fill="white" /> Join Telegram
-                     </a>
-                     <a href="https://www.youtube.com/@prime-clip-zone" target="_blank" className="flex items-center gap-1.5 bg-red-600 px-3 py-1.5 rounded text-[10px] font-black shadow-md uppercase">
-                        <Youtube size={12} fill="white" /> Subscribe
-                     </a>
-                   </div>
-                </div>
-                <Search className="text-gray-300 cursor-pointer" size={26} onClick={() => setIsSearchOpen(true)} />
-              </>
-            ) : (
-              <form onSubmit={(e) => {e.preventDefault(); router.push(`/search?q=${searchQuery}`); setIsSearchOpen(false);}} className="flex items-center w-full gap-2 px-2">
-                <input autoFocus type="text" placeholder="Search..." className="w-full bg-gray-900 border border-gray-700 rounded-lg py-2 px-4 text-white outline-none" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
-                <X className="text-gray-400 cursor-pointer" size={26} onClick={() => setIsSearchOpen(false)} />
-              </form>
-            )}
-          </div>
-        </header>
-
+        {/* উপরের স্লাইডার ও ডিজাইন */}
         {pathname === '/' && (
-          <div className="mt-3 px-2">
-             <div className="flex overflow-x-auto gap-3 pb-2 no-scrollbar">
-                {[1,2,3,4,5,6].map((i) => (
-                  <div key={i} className="min-w-[130px] aspect-[9/14] bg-gray-900 rounded-lg border border-gray-800 relative overflow-hidden shadow-lg">
-                     <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90"></div>
-                     <p className="absolute bottom-2 left-2 text-[9px] font-bold text-gray-500 uppercase italic">Drama {i}</p>
-                  </div>
-                ))}
-             </div>
-             <div className="flex justify-between text-[10px] font-black text-gray-700 border-y border-gray-900 py-2 mt-2 px-2">
-                {['#','A','B','C','D','E','F','G','H','I','J','K','L','M','N'].map(l => <span key={l}>{l}</span>)}
-             </div>
+          <div className="relative w-full h-[380px] overflow-hidden">
+            <div className="flex transition-transform duration-1000 ease-in-out h-full" style={{ transform: `translateX(-${slideIndex * 100}%)` }}>
+              {banners.map((banner) => (
+                <img key={banner.id} src={banner.img} className="min-w-full h-full object-cover opacity-60" alt="Slider" />
+              ))}
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0b0b0b] via-transparent to-black/30"></div>
+            
+            <div className="absolute inset-0 p-4 flex flex-col justify-between z-10">
+              <div className="flex justify-between items-center">
+                <Menu size={30} onClick={() => setIsMenuOpen(true)} className="cursor-pointer" />
+                <h1 className="text-2xl font-black italic tracking-tighter">PRIME CLIP <span className="text-red-600 underline">ZONE</span></h1>
+                <Search size={28} onClick={() => setIsSearchOpen(true)} className="cursor-pointer" />
+              </div>
+
+              <div className="flex flex-col items-center gap-4 mb-4">
+                 <div className="flex gap-3">
+                   <a href="https://t.me/primeclipzone" target="_blank" className="bg-[#229ED9] px-5 py-2 rounded-full text-[12px] font-black flex items-center gap-2 shadow-lg">
+                      <Send size={14} fill="white" /> Telegram
+                   </a>
+                   <a href="https://www.youtube.com/@prime-clip-zone" target="_blank" className="bg-red-600 px-5 py-2 rounded-full text-[12px] font-black flex items-center gap-2 shadow-lg">
+                      <Youtube size={14} fill="white" /> Subscribe
+                   </a>
+                 </div>
+                 <div className="flex justify-between w-full max-w-md text-[11px] font-bold text-gray-500 border-t border-white/10 pt-3 px-2 overflow-x-auto no-scrollbar whitespace-nowrap">
+                    {['#','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R'].map(l => <span key={l} className="px-1.5">{l}</span>)}
+                 </div>
+              </div>
+            </div>
           </div>
         )}
 
+        {/* সাইড মেনু যেখানে আপনার অরিজিনাল লগইন সিস্টেম আছে */}
         {isMenuOpen && (
-          <div className="fixed inset-0 z-[60] flex animate-in slide-in-from-left duration-300">
+          <div className="fixed inset-0 z-[110] flex animate-in slide-in-from-left duration-300">
             <div className="fixed inset-0 bg-black/80" onClick={() => setIsMenuOpen(false)}></div>
-            <div className="relative w-72 bg-[#121212] h-full p-6 shadow-2xl border-r border-gray-800">
-              <div className="flex justify-between items-center mb-8 text-red-600 font-black italic text-lg">
-                <span>DASHBOARD</span> <X className="text-white cursor-pointer" size={24} onClick={() => setIsMenuOpen(false)} />
+            <div className="relative w-72 bg-[#121212] h-full p-6 border-r border-gray-800">
+              <div className="flex justify-between items-center mb-8 text-red-600 font-black italic">
+                <span>DASHBOARD</span> <X className="text-white" size={26} onClick={() => setIsMenuOpen(false)} />
               </div>
+
               <div className="bg-gray-900 p-4 rounded-xl border border-gray-800 mb-6">
                 {isLoggedIn ? (
                   <div className="flex flex-col items-center gap-3">
-                    <div className="text-green-500 font-bold flex items-center gap-2"><User size={20} /> Member Active</div>
-                    <button onClick={handleLogout} className="text-[11px] text-red-500 font-black uppercase border border-red-500/20 px-4 py-2 rounded-md hover:bg-red-500/10 transition flex items-center gap-1.5">
-                      <LogOut size={14} /> Logout Account
+                    <div className="text-green-500 font-bold flex items-center gap-2 text-sm"><User size={24} /> <span>Member Access Active</span></div>
+                    <button onClick={handleLogout} className="flex items-center gap-1.5 text-red-500 text-[11px] font-black border border-red-500/20 px-4 py-2 rounded-lg">
+                      <LogOut size={16} /> LOGOUT
                     </button>
                   </div>
                 ) : (
                   <form onSubmit={handleLogin} className="flex flex-col gap-3">
-                    <p className="text-[11px] text-yellow-500 font-bold text-center italic">👉 লগইন কোড টেলিগ্রাম চ্যানেলের পিন কমেন্টে ✅👈</p>
-                    <input type="password" placeholder="Enter Code" className="bg-black p-3 border border-gray-700 rounded-lg text-sm text-center focus:border-red-600 outline-none" value={password} onChange={(e) => setPassword(e.target.value)} />
-                    <button type="submit" className="bg-red-600 p-3 rounded-lg font-black text-sm flex items-center justify-center gap-2 uppercase"><LogIn size={18} /> Login</button>
+                    {/* আপনার অরিজিনাল মেসেজ */}
+                    <p className="text-[11px] text-yellow-500 font-bold text-center leading-relaxed">
+                      👉 লগইন কোড টেলিগ্রাম চ্যানেলের পিন কমেন্টে ✅👈
+                    </p>
+                    <input type="password" placeholder="Enter Code" className="bg-black p-3 border border-gray-700 rounded-xl text-sm text-center focus:border-red-600 outline-none" value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <button type="submit" className="bg-red-600 py-3 rounded-xl font-black text-sm uppercase tracking-widest"><LogIn size={18} /> Login</button>
                   </form>
                 )}
               </div>
-              <nav className="flex flex-col gap-6 font-black text-gray-500 mt-4 uppercase text-sm tracking-wider">
-                <Link href="/" onClick={() => setIsMenuOpen(false)} className="hover:text-white transition">Home</Link>
-                <Link href="/category/1" onClick={() => setIsMenuOpen(false)} className="hover:text-white transition">Movies</Link>
-                <Link href="/category/2" onClick={() => setIsMenuOpen(false)} className="hover:text-white transition">Drama Series</Link>
+
+              <nav className="flex flex-col gap-6 font-bold text-gray-500 uppercase text-xs tracking-widest">
+                <Link href="/" onClick={() => setIsMenuOpen(false)}>Home Page</Link>
+                <Link href="/category/1" onClick={() => setIsMenuOpen(false)}>Movies List</Link>
+                <Link href="/category/2" onClick={() => setIsMenuOpen(false)}>Series / Drama</Link>
               </nav>
             </div>
           </div>
         )}
 
-        <main className="pb-24 min-h-screen">
+        <main className="min-h-screen pb-32">
           {children}
-          <div className="flex justify-center my-6">
-            <iframe src="https://www.highperformanceformat.com/88e64fc2b349b73b6919070f767e696b/invoke.js" height="50" width="320" className="border-none overflow-hidden rounded shadow-lg bg-gray-900"></iframe>
-          </div>
         </main>
 
-        <nav className="fixed bottom-0 left-0 right-0 bg-[#0f0f0f]/95 backdrop-blur-sm border-t border-gray-800 flex justify-around py-3 px-2 z-50">
-           {navItems.map((item) => (
-            <Link key={item.name} href={item.path} className={`flex flex-col items-center gap-1 transition-all ${pathname === item.path ? 'text-red-500' : 'text-gray-500'}`}>
-              {item.icon} <span className="text-[9px] font-black uppercase">{item.name}</span>
-            </Link>
-           ))}
+        <nav className="fixed bottom-0 left-0 right-0 bg-[#0f0f0f]/95 backdrop-blur-md border-t border-gray-800 flex justify-around py-4 px-2 z-50">
+           <Link href="/" className="flex flex-col items-center gap-1 text-red-500"><Home size={24} /><span className="text-[9px] font-black uppercase">Home</span></Link>
+           <Link href="/category/1" className="flex flex-col items-center gap-1 text-gray-500"><PlaySquare size={24} /><span className="text-[9px] font-black uppercase">Movies</span></Link>
+           <a href="https://facebook.com" target="_blank" className="flex flex-col items-center gap-1 text-blue-500 -mt-10 bg-[#0b0b0b] p-3 rounded-full border-4 border-[#0f0f0f] shadow-2xl transition-transform hover:scale-110"><Facebook size={26} /></a>
+           <Link href="/category/2" className="flex flex-col items-center gap-1 text-gray-500"><Library size={24} /><span className="text-[9px] font-black uppercase">Series</span></Link>
+           <Link href="/category/3" className="flex flex-col items-center gap-1 text-gray-500"><Moon size={24} /><span className="text-[9px] font-black uppercase">Islamic</span></Link>
         </nav>
       </body>
     </html>
   );
-                    }
-            
+    }
+                
