@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, PlaySquare, Send, Library, Moon, Menu, Search, Youtube, Facebook, X, User } from 'lucide-react'; 
+import { Home, PlaySquare, Send, Library, Menu, Search, Youtube, Facebook, X, User } from 'lucide-react'; 
 import './globals.css'; 
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -53,7 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="bg-[#0b0b0b] text-white antialiased overflow-x-hidden">
         
-        {/* স্লাইডার ও টপ বার (১ নম্বর ছবির মতো লোগো ও বাটন ডিজাইন) */}
+        {/* স্লাইডার ও টপ বার - আপনার অরিজিনাল কোড অনুযায়ী */}
         {pathname === '/' && (
           <div className="relative w-full h-[320px] overflow-hidden">
             <div className="flex transition-transform duration-1000 h-full" style={{ transform: `translateX(-${slideIndex * 100}%)` }}>
@@ -61,25 +61,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <img key={banner.id} src={banner.img} className="min-w-full h-full object-cover opacity-40" alt="Banner" />
               ))}
             </div>
-            {/* ছবির মতো ড্রামাটিক গ্র্যাডিয়েন্ট */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#0b0b0b] via-transparent to-black/60"></div>
             
             <div className="absolute inset-0 p-4 flex flex-col z-10">
               <div className="flex justify-between items-center mb-4">
                 <Menu size={28} onClick={() => setIsMenuOpen(true)} className="cursor-pointer" />
-                {/* ১ নম্বর ছবির মতো লোগো স্টাইল */}
                 <h1 className="text-xl font-black italic tracking-tighter">
                    PRIME CLIP <span className="text-red-600 underline decoration-2 underline-offset-4">ZONE</span>
                 </h1>
                 <Search size={26} onClick={() => setIsSearchOpen(true)} className="cursor-pointer" />
               </div>
 
-              {/* স্লাইডারের উপর টেলিগ্রাম ও ইউটিউব বাটন - ছবির মতো নিখুঁত পজিশন */}
+              {/* ছবির মতো টেলিগ্রাম ও ইউটিউব বাটন পজিশন */}
               <div className="flex justify-center gap-6 mt-2">
-                 <a href="https://t.me/primeclipzone" target="_blank" className="flex items-center gap-1.5 text-[#229ED9] text-[12px] font-black uppercase tracking-wider shadow-black drop-shadow-md">
+                 <a href="https://t.me/primeclipzone" target="_blank" className="flex items-center gap-1.5 text-[#229ED9] text-[12px] font-black uppercase tracking-wider">
                     <Send size={16} fill="#229ED9" className="text-white" /> Join Telegram
                  </a>
-                 <a href="http://youtube.com" target="_blank" className="flex items-center gap-1.5 text-red-600 text-[12px] font-black uppercase tracking-wider shadow-black drop-shadow-md">
+                 <a href="http://youtube.com" target="_blank" className="flex items-center gap-1.5 text-red-600 text-[12px] font-black uppercase tracking-wider">
                     <Youtube size={16} fill="red" className="text-white" /> Subscribe
                  </a>
               </div>
@@ -87,7 +85,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         )}
 
-        {/* সাইড মেনু / লগইন সিস্টেম (আপনার আগের কোড অনুযায়ী) */}
+        {/* সাইড মেনু / লগইন সিস্টেম (অপরিবর্তিত) */}
         {isMenuOpen && (
           <div className="fixed inset-0 z-[110] flex animate-in slide-in-from-left duration-300">
             <div className="fixed inset-0 bg-black/80" onClick={() => setIsMenuOpen(false)}></div>
@@ -99,11 +97,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 {isLoggedIn ? (
                   <div className="flex flex-col items-center gap-3 text-center">
                     <User size={30} className="text-green-500" />
-                    <span className="text-xs font-bold text-green-500">MEMBER ACTIVE</span>
+                    <span className="text-xs font-bold text-green-500 uppercase tracking-widest">Member Active</span>
                     <button onClick={handleLogout} className="text-red-500 text-[10px] font-black border border-red-500/20 px-4 py-2 rounded-md">LOGOUT</button>
                   </div>
                 ) : (
                   <form onSubmit={handleLogin} className="flex flex-col gap-3">
+                    <p className="text-[10px] text-yellow-500 font-bold text-center">👉 কোড টেলিগ্রাম পিন কমেন্টে আছে ✅</p>
                     <input type="password" placeholder="Enter Code" className="bg-black p-3 border border-gray-700 rounded-lg text-xs text-center outline-none" value={password} onChange={(e) => setPassword(e.target.value)} />
                     <button type="submit" className="bg-red-600 py-3 rounded-lg font-black text-xs uppercase tracking-widest">LOGIN</button>
                   </form>
@@ -117,26 +116,39 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
 
-        {/* ৩. বটম নেভিগেশন (ফেসবুক বাটন ঠিক রাখা হয়েছে এবং ইসলামিক পাল্টে এনিমে করা হয়েছে) */}
-        <nav className="fixed bottom-0 left-0 right-0 bg-[#0a0a0a]/95 backdrop-blur-md border-t border-white/5 flex justify-around items-center py-4 px-2 z-50">
-           <Link href="/" className="flex flex-col items-center text-red-500"><Home size={22} /><span className="text-[9px] font-black uppercase mt-1 tracking-tighter">Home</span></Link>
-           <Link href="/category/1" className="flex flex-col items-center text-gray-500"><PlaySquare size={22} /><span className="text-[9px] font-black uppercase mt-1 tracking-tighter">Movies</span></Link>
+        {/* ৩. বটম নেভিগেশন (১ নম্বর ছবির মতো হুবহু ডিজাইন) */}
+        <nav className="fixed bottom-0 left-0 right-0 bg-[#0a0f14]/95 backdrop-blur-md border-t border-white/5 flex justify-around items-center py-4 px-2 z-50">
+           {/* Home */}
+           <Link href="/" className="flex flex-col items-center text-red-500">
+             <Home size={22} />
+             <span className="text-[10px] font-bold mt-1">Home</span>
+           </Link>
+
+           {/* Movies */}
+           <Link href="/category/1" className="flex flex-col items-center text-gray-500">
+             <PlaySquare size={22} />
+             <span className="text-[10px] font-bold mt-1">Movies</span>
+           </Link>
            
-           {/* আপনার অরিজিনাল ফেসবুক বাটন - যা আপনি সরাতে চান না */}
+           {/* আপনার অরিজিনাল ফেসবুক বাটন (সঠিক পজিশন) */}
            <a href="https://facebook.com" target="_blank" className="flex flex-col items-center justify-center bg-blue-600 p-2.5 rounded-full shadow-lg -mt-4 border-4 border-[#0b0b0b] transition-transform active:scale-90">
              <Facebook size={22} className="text-white" />
            </a>
            
-           <Link href="/category/2" className="flex flex-col items-center text-gray-500"><Library size={22} /><span className="text-[9px] font-black uppercase mt-1 tracking-tighter">Series</span></Link>
+           {/* Series */}
+           <Link href="/category/2" className="flex flex-col items-center text-gray-500">
+             <Library size={22} />
+             <span className="text-[10px] font-bold mt-1">Series</span>
+           </Link>
            
-           {/* ইসলামিক বাটন সরিয়ে এখানে এনিমে (Anime) বসানো হয়েছে */}
-           <Link href="/category/anime" className="flex flex-col items-center text-gray-500">
-              <img src="https://cdn-icons-png.flaticon.com/512/2314/2314859.png" className="w-5 h-5 grayscale invert opacity-50" alt="Anime" />
-              <span className="text-[9px] font-black uppercase mt-1 tracking-tighter">Anime</span>
+           {/* Anime (Islamic এর বদলে) */}
+           <Link href="/category/anime" className="flex flex-col items-center text-gray-400">
+              <img src="https://cdn-icons-png.flaticon.com/512/2314/2314859.png" className="w-6 h-6 grayscale invert opacity-60" alt="Anime" />
+              <span className="text-[10px] font-bold mt-1">Anime</span>
            </Link>
         </nav>
       </body>
     </html>
   );
-        }
-        
+                      }
+            
