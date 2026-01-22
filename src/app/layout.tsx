@@ -1,31 +1,19 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Home, PlaySquare, Send, Library, Menu, Search, Youtube, Facebook, X, User } from 'lucide-react'; 
+import { Home, PlaySquare, Library, Facebook, X, User } from 'lucide-react'; 
 import './globals.css'; 
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [password, setPassword] = useState("");
-  const [slideIndex, setSlideIndex] = useState(0);
 
-  const banners = [
-    { id: 1, img: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=1000" },
-    { id: 2, img: "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=1000" }
-  ];
-
+  // লগইন চেক
   useEffect(() => {
     const savedLogin = localStorage.getItem('isLoggedIn');
     if (savedLogin === 'true') setIsLoggedIn(true);
-    const interval = setInterval(() => {
-      setSlideIndex((prev) => (prev + 1) % banners.length);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, [banners.length]);
+  }, []);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,62 +37,42 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <head>
         <title>PRIME CLIP ZONE</title>
-        <script async src="https://pl28464189.effectivegatecpm.com/1182f83355f8a97cc17cecf80297bd4e/invoke.js"></script>
+        {/* আপনি চাইলে বিজ্ঞাপনের স্ক্রিপ্ট এখান থেকে সরিয়ে সরাসরি page.tsx এ বসাতে পারেন */}
       </head>
       <body className="bg-[#0b0b0b] text-white antialiased overflow-x-hidden">
         
-        {/* স্লাইডার ও টপ বার - আপনার অরিজিনাল কোড অনুযায়ী */}
-        {pathname === '/' && (
-          <div className="relative w-full h-[320px] overflow-hidden">
-            <div className="flex transition-transform duration-1000 h-full" style={{ transform: `translateX(-${slideIndex * 100}%)` }}>
-              {banners.map((banner) => (
-                <img key={banner.id} src={banner.img} className="min-w-full h-full object-cover opacity-40" alt="Banner" />
-              ))}
-            </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0b0b0b] via-transparent to-black/60"></div>
-            
-            <div className="absolute inset-0 p-4 flex flex-col z-10">
-              <div className="flex justify-between items-center mb-4">
-                <Menu size={28} onClick={() => setIsMenuOpen(true)} className="cursor-pointer" />
-                <h1 className="text-xl font-black italic tracking-tighter">
-                   PRIME CLIP <span className="text-red-600 underline decoration-2 underline-offset-4">ZONE</span>
-                </h1>
-                <Search size={26} onClick={() => setIsSearchOpen(true)} className="cursor-pointer" />
-              </div>
-
-              {/* ছবির মতো টেলিগ্রাম ও ইউটিউব বাটন পজিশন */}
-              <div className="flex justify-center gap-6 mt-2">
-                 <a href="https://t.me/primeclipzone" target="_blank" className="flex items-center gap-1.5 text-[#229ED9] text-[12px] font-black uppercase tracking-wider">
-                    <Send size={16} fill="#229ED9" className="text-white" /> Join Telegram
-                 </a>
-                 <a href="http://youtube.com" target="_blank" className="flex items-center gap-1.5 text-red-600 text-[12px] font-black uppercase tracking-wider">
-                    <Youtube size={16} fill="red" className="text-white" /> Subscribe
-                 </a>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* সাইড মেনু / লগইন সিস্টেম (অপরিবর্তিত) */}
+        {/* সাইড মেনু / লগইন সিস্টেম - শুধুমাত্র এখানেই থাকবে */}
         {isMenuOpen && (
-          <div className="fixed inset-0 z-[110] flex animate-in slide-in-from-left duration-300">
+          <div className="fixed inset-0 z-[150] flex animate-in slide-in-from-left duration-300">
             <div className="fixed inset-0 bg-black/80" onClick={() => setIsMenuOpen(false)}></div>
-            <div className="relative w-72 bg-[#121212] h-full p-6 border-r border-gray-800">
+            <div className="relative w-72 bg-[#121212] h-full p-6 border-r border-gray-800 shadow-2xl">
               <div className="flex justify-between items-center mb-8 text-red-600 font-black italic">
-                <span>DASHBOARD</span> <X className="text-white" size={26} onClick={() => setIsMenuOpen(false)} />
+                <span>DASHBOARD</span> <X className="text-white cursor-pointer" size={26} onClick={() => setIsMenuOpen(false)} />
               </div>
-              <div className="bg-gray-900 p-4 rounded-xl border border-gray-800 mb-6">
+              
+              <div className="bg-gray-900 p-5 rounded-2xl border border-gray-800 shadow-inner">
                 {isLoggedIn ? (
-                  <div className="flex flex-col items-center gap-3 text-center">
-                    <User size={30} className="text-green-500" />
-                    <span className="text-xs font-bold text-green-500 uppercase tracking-widest">Member Active</span>
-                    <button onClick={handleLogout} className="text-red-500 text-[10px] font-black border border-red-500/20 px-4 py-2 rounded-md">LOGOUT</button>
+                  <div className="flex flex-col items-center gap-4 text-center">
+                    <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center border border-green-500/20">
+                       <User size={32} className="text-green-500" />
+                    </div>
+                    <div>
+                       <span className="text-xs font-black text-green-500 uppercase tracking-widest block">Member Active</span>
+                       <p className="text-[10px] text-gray-500 mt-1">Welcome back to Prime Clip Zone</p>
+                    </div>
+                    <button onClick={handleLogout} className="w-full text-red-500 text-[11px] font-black border border-red-500/20 px-4 py-2.5 rounded-xl hover:bg-red-500/5 transition-all mt-2">LOGOUT</button>
                   </div>
                 ) : (
-                  <form onSubmit={handleLogin} className="flex flex-col gap-3">
-                    <p className="text-[10px] text-yellow-500 font-bold text-center">👉 কোড টেলিগ্রাম পিন কমেন্টে আছে ✅</p>
-                    <input type="password" placeholder="Enter Code" className="bg-black p-3 border border-gray-700 rounded-lg text-xs text-center outline-none" value={password} onChange={(e) => setPassword(e.target.value)} />
-                    <button type="submit" className="bg-red-600 py-3 rounded-lg font-black text-xs uppercase tracking-widest">LOGIN</button>
+                  <form onSubmit={handleLogin} className="flex flex-col gap-4">
+                    <p className="text-[10px] text-yellow-500 font-bold text-center leading-relaxed">👉 কোড টেলিগ্রাম পিন কমেন্টে আছে ✅</p>
+                    <input 
+                      type="password" 
+                      placeholder="Enter Code" 
+                      className="bg-black p-3.5 border border-gray-700 rounded-xl text-xs text-center outline-none focus:border-red-600 transition-all shadow-inner" 
+                      value={password} 
+                      onChange={(e) => setPassword(e.target.value)} 
+                    />
+                    <button type="submit" className="bg-red-600 py-3.5 rounded-xl font-black text-xs uppercase tracking-widest shadow-lg shadow-red-600/20 active:scale-95 transition-transform">LOGIN</button>
                   </form>
                 )}
               </div>
@@ -116,39 +84,38 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
 
-        {/* ৩. বটম নেভিগেশন (১ নম্বর ছবির মতো হুবহু ডিজাইন) */}
-        <nav className="fixed bottom-0 left-0 right-0 bg-[#0a0f14]/95 backdrop-blur-md border-t border-white/5 flex justify-around items-center py-4 px-2 z-50">
-           {/* Home */}
-           <Link href="/" className="flex flex-col items-center text-red-500">
+        {/* ৩. বটম নেভিগেশন - আপনার অরিজিনাল ফেসবুক বাটনসহ */}
+        <nav className="fixed bottom-0 left-0 right-0 bg-[#0a0f14]/95 backdrop-blur-md border-t border-white/5 flex justify-around items-center py-4 px-2 z-[100] shadow-[0_-10px_20px_rgba(0,0,0,0.5)]">
+           <Link href="/" className="flex flex-col items-center text-red-500 transition-colors">
              <Home size={22} />
-             <span className="text-[10px] font-bold mt-1">Home</span>
+             <span className="text-[10px] font-black mt-1 uppercase tracking-tighter">Home</span>
            </Link>
 
-           {/* Movies */}
-           <Link href="/category/1" className="flex flex-col items-center text-gray-500">
+           <Link href="/category/1" className="flex flex-col items-center text-gray-500 hover:text-white transition-colors">
              <PlaySquare size={22} />
-             <span className="text-[10px] font-bold mt-1">Movies</span>
+             <span className="text-[10px] font-black mt-1 uppercase tracking-tighter">Movies</span>
            </Link>
            
-           {/* আপনার অরিজিনাল ফেসবুক বাটন (সঠিক পজিশন) */}
-           <a href="https://facebook.com" target="_blank" className="flex flex-col items-center justify-center bg-blue-600 p-2.5 rounded-full shadow-lg -mt-4 border-4 border-[#0b0b0b] transition-transform active:scale-90">
+           {/* আপনার অরিজিনাল গোল ফেসবুক বাটন */}
+           <a href="https://facebook.com/primeclipzone" target="_blank" className="flex flex-col items-center justify-center bg-blue-600 w-12 h-12 rounded-full shadow-lg shadow-blue-600/30 -mt-8 border-4 border-[#0b0b0b] transition-transform active:scale-90 z-50">
              <Facebook size={22} className="text-white" />
            </a>
            
-           {/* Series */}
-           <Link href="/category/2" className="flex flex-col items-center text-gray-500">
+           <Link href="/category/2" className="flex flex-col items-center text-gray-500 hover:text-white transition-colors">
              <Library size={22} />
-             <span className="text-[10px] font-bold mt-1">Series</span>
+             <span className="text-[10px] font-black mt-1 uppercase tracking-tighter">Series</span>
            </Link>
            
-           {/* Anime (Islamic এর বদলে) */}
-           <Link href="/category/anime" className="flex flex-col items-center text-gray-400">
-              <img src="https://cdn-icons-png.flaticon.com/512/2314/2314859.png" className="w-6 h-6 grayscale invert opacity-60" alt="Anime" />
-              <span className="text-[10px] font-bold mt-1">Anime</span>
+           {/* Anime বাটন */}
+           <Link href="/category/anime" className="flex flex-col items-center text-gray-500 hover:text-white transition-colors">
+              <div className="w-5 h-5 overflow-hidden">
+                <img src="https://cdn-icons-png.flaticon.com/512/2314/2314859.png" className="w-full h-full grayscale invert opacity-60" alt="Anime" />
+              </div>
+              <span className="text-[10px] font-black mt-1 uppercase tracking-tighter">Anime</span>
            </Link>
         </nav>
       </body>
     </html>
   );
-                      }
-            
+              }
+                    
