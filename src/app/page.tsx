@@ -2,12 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Play, Search, Menu, Send, Youtube, ChevronRight, X, LogIn, LogOut } from 'lucide-react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination } from 'swiper/modules';
-
-// Swiper এর প্রয়োজনীয় স্টাইল
-import 'swiper/css';
-import 'swiper/css/pagination';
 
 import categoriesData from '@/data/categories.json';
 import videosData from '@/data/videos.json';
@@ -34,9 +28,9 @@ export default function Home() {
   );
 
   return (
-    <div className="pb-24 bg-[#080808] min-h-screen text-white font-sans">
+    <div className="pb-24 bg-[#080808] min-h-screen text-white font-sans overflow-x-hidden">
       
-      {/* --- টপ বার --- */}
+      {/* --- টপ বার (সব অরিজিনাল বাটনসহ) --- */}
       <header className="p-4 bg-black border-b border-white/5 sticky top-0 z-[1000] flex flex-col items-center">
         <div className="flex justify-between w-full items-center mb-4">
           <Menu size={26} className="cursor-pointer text-gray-300" onClick={() => setIsMenuOpen(true)} />
@@ -92,44 +86,17 @@ export default function Home() {
             <input 
               type="password" 
               placeholder="Enter Code (25802580)" 
-              className="w-full p-3 bg-black rounded-lg mb-4 text-center border border-white/20 focus:border-red-600 outline-none font-bold"
+              className="w-full p-3 bg-black rounded-lg mb-4 text-center border border-white/20 focus:border-red-600 outline-none font-bold text-white"
               value={loginCode}
               onChange={(e) => setLoginCode(e.target.value)}
             />
-            <button onClick={handleLogin} className="w-full bg-red-600 py-3 rounded-lg font-black uppercase active:scale-95">Verify & Login</button>
+            <button onClick={handleLogin} className="w-full bg-red-600 py-3 rounded-lg font-black uppercase active:scale-95 text-white">Verify & Login</button>
             <button onClick={() => setShowLoginModal(false)} className="mt-4 text-gray-500 text-xs uppercase">Close</button>
           </div>
         </div>
       )}
 
-      {/* --- স্লাইডার (অটোমেটিক ও হাত দিয়ে টানা যাবে) --- */}
-      <section className="mt-4 px-4">
-        <Swiper
-          modules={[Autoplay, Pagination]}
-          spaceBetween={10}
-          slidesPerView={1}
-          autoplay={{ delay: 5000, disableOnInteraction: false }}
-          pagination={{ clickable: true }}
-          className="rounded-2xl overflow-hidden h-[240px] md:h-[450px] border border-white/5"
-        >
-          {videosData.slice(0, 10).map((v) => (
-            <SwiperSlide key={v.id}>
-              <div className="relative w-full h-full">
-                <img src={v.thumbnail_url || v.thumbnail} className="w-full h-full object-cover opacity-60" alt={v.title} />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-                <div className="absolute bottom-8 left-6">
-                  <h2 className="text-2xl font-black uppercase italic text-white mb-3 drop-shadow-xl">{v.title}</h2>
-                  <Link href={`/watch/${v.id}`} className="bg-red-600 text-white px-6 py-2.5 rounded-full font-black text-[12px] uppercase inline-flex items-center gap-2">
-                    <Play size={16} fill="white" /> Play Episode
-                  </Link>
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </section>
-
-      {/* --- ড্রামা লিস্ট (হরিজন্টাল সোয়াইপ) --- */}
+      {/* --- ভিডিও স্লাইডার এবং লিস্ট (হাত দিয়ে সোয়াইপ হবে কিন্তু এরর দেবে না) --- */}
       <div className="mt-10 px-4 space-y-12">
         {categoriesData.map((cat, idx) => {
           const catVideos = filteredVideos.filter(v => String(v.category_id) === String(cat.id));
@@ -142,27 +109,19 @@ export default function Home() {
                 <ChevronRight size={18} className="text-gray-600" />
               </div>
 
-              <Swiper
-                modules={[Autoplay]}
-                spaceBetween={12}
-                slidesPerView={2.3}
-                autoplay={{ delay: 4000, disableOnInteraction: false }}
-                breakpoints={{ 640: { slidesPerView: 4.2 }, 1024: { slidesPerView: 6.2 } }}
-                className="pb-4"
-              >
+              {/* এটি হাত দিয়ে টানলে বামে যাবে এবং থেমে থেমে আসবে */}
+              <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-hide snap-x transition-all duration-300">
                 {catVideos.map((video) => (
-                  <SwiperSlide key={video.id}>
-                    <Link href={`/watch/${video.id}`} className="group block">
-                      <div className="aspect-[3/4] relative rounded-xl overflow-hidden bg-[#151515] border border-white/5 shadow-2xl group-hover:ring-2 group-hover:ring-red-600">
-                        <img src={video.thumbnail_url || video.thumbnail} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={video.title} />
-                        <div className="absolute top-2 right-2 bg-blue-600 text-[9px] px-2 py-0.5 rounded font-black shadow-lg">EP {video.id}</div>
-                        {video.tag && <div className="absolute bottom-2 left-2 bg-red-600 text-[8px] px-1.5 py-0.5 rounded font-black italic uppercase shadow-lg">{video.tag}</div>}
-                      </div>
-                      <h3 className="mt-2 text-[10px] font-bold text-gray-400 line-clamp-2 uppercase italic tracking-tighter group-hover:text-red-600">{video.title}</h3>
-                    </Link>
-                  </SwiperSlide>
+                  <Link key={video.id} href={`/watch/${video.id}`} className="min-w-[160px] sm:min-w-[220px] snap-start group block">
+                    <div className="aspect-[3/4] relative rounded-xl overflow-hidden bg-[#151515] border border-white/5 shadow-2xl group-hover:ring-2 group-hover:ring-red-600">
+                      <img src={video.thumbnail_url || video.thumbnail} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={video.title} />
+                      <div className="absolute top-2 right-2 bg-blue-600 text-[9px] px-2 py-0.5 rounded font-black shadow-lg">EP {video.id}</div>
+                      {video.tag && <div className="absolute bottom-2 left-2 bg-red-600 text-[8px] px-1.5 py-0.5 rounded font-black italic uppercase shadow-lg">{video.tag}</div>}
+                    </div>
+                    <h3 className="mt-2 text-[10px] font-bold text-gray-400 line-clamp-2 uppercase italic tracking-tighter group-hover:text-red-600 leading-tight">{video.title}</h3>
+                  </Link>
                 ))}
-              </Swiper>
+              </div>
 
               {/* বিজ্ঞাপন জোন */}
               {idx === 1 && (
@@ -175,8 +134,12 @@ export default function Home() {
         })}
       </div>
 
+      <style jsx global>{`
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
+
       <script src="https://pl28595065.effectivegatecpm.com/34/95/5d/34955d11745783891e5e1882f225e510.js" async></script>
     </div>
   );
-      }
-        
+}
