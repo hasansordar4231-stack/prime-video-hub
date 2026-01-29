@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { Play, Search, Menu, Send, Youtube, ChevronRight, X, LogIn, LogOut } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
+
+// Swiper এর প্রয়োজনীয় স্টাইল
 import 'swiper/css';
 import 'swiper/css/pagination';
 
@@ -17,7 +19,6 @@ export default function Home() {
   const [loginCode, setLoginCode] = useState("");
   const [showLoginModal, setShowLoginModal] = useState(false);
 
-  // ১. সিক্রেট লগইন সিস্টেম
   const handleLogin = () => {
     if (loginCode === "25802580") {
       setIsLoggedIn(true);
@@ -28,7 +29,6 @@ export default function Home() {
     }
   };
 
-  // ২. সার্চ ফিল্টার
   const filteredVideos = videosData.filter(v => 
     v.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -36,7 +36,7 @@ export default function Home() {
   return (
     <div className="pb-24 bg-[#080808] min-h-screen text-white font-sans">
       
-      {/* --- অরিজিনাল টপ বার (সব বাটনসহ) --- */}
+      {/* --- টপ বার --- */}
       <header className="p-4 bg-black border-b border-white/5 sticky top-0 z-[1000] flex flex-col items-center">
         <div className="flex justify-between w-full items-center mb-4">
           <Menu size={26} className="cursor-pointer text-gray-300" onClick={() => setIsMenuOpen(true)} />
@@ -47,7 +47,7 @@ export default function Home() {
             <input 
               type="text" 
               placeholder="Search..." 
-              className="bg-transparent text-[12px] outline-none w-20 sm:w-40"
+              className="bg-transparent text-[12px] outline-none w-20 sm:w-40 font-bold"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -55,7 +55,6 @@ export default function Home() {
           </div>
         </div>
         
-        {/* আপনার সেই অরিজিনাল সোশ্যাল লিঙ্ক */}
         <div className="flex gap-6 border-t border-white/5 pt-3 w-full justify-center">
           <a href="https://t.me/primeclipzone" target="_blank" className="flex items-center gap-1.5 text-[#229ED9] text-[10px] font-black uppercase">
             <Send size={14} fill="#229ED9" className="text-white" /> Join Telegram
@@ -66,7 +65,7 @@ export default function Home() {
         </div>
       </header>
 
-      {/* --- সাইড মেনু (লগইন ও লিগ্যাল পেজ) --- */}
+      {/* --- সাইড মেনু --- */}
       {isMenuOpen && (
         <div className="fixed inset-0 z-[2000] bg-black/98 flex flex-col p-8 transition-all">
           <X className="self-end mb-8 cursor-pointer text-red-600" size={32} onClick={() => setIsMenuOpen(false)} />
@@ -80,7 +79,7 @@ export default function Home() {
             <Link href="/about" onClick={() => setIsMenuOpen(false)} className="block hover:text-red-600">About Us</Link>
             <Link href="/privacy" onClick={() => setIsMenuOpen(false)} className="block hover:text-red-600">Privacy Policy</Link>
             <Link href="/disclaimer" onClick={() => setIsMenuOpen(false)} className="block hover:text-red-600">Disclaimer</Link>
-            <Link href="/contact" onClick={() => setIsMenuOpen(false)} className="block text-sm normal-case text-gray-400">hasanvai4231@gmail.com</Link>
+            <Link href="/contact" onClick={() => setIsMenuOpen(false)} className="block text-sm normal-case text-gray-400 font-bold">hasanvai4231@gmail.com</Link>
           </div>
         </div>
       )}
@@ -89,11 +88,11 @@ export default function Home() {
       {showLoginModal && (
         <div className="fixed inset-0 z-[3000] bg-black/90 flex items-center justify-center p-4">
           <div className="bg-[#111] p-6 rounded-2xl w-full max-w-sm border border-red-600/30 text-center shadow-2xl">
-            <h2 className="mb-4 font-bold text-yellow-500 text-sm">লগইন ✅কোড টেলিগ্রাম পিন কমেন্টে✅</h2>
+            <h2 className="mb-4 font-bold text-yellow-500 text-sm italic">লগইন ✅কোড টেলিগ্রাম পিন কমেন্টে✅</h2>
             <input 
               type="password" 
               placeholder="Enter Code (25802580)" 
-              className="w-full p-3 bg-black rounded-lg mb-4 text-center border border-white/20 focus:border-red-600 outline-none"
+              className="w-full p-3 bg-black rounded-lg mb-4 text-center border border-white/20 focus:border-red-600 outline-none font-bold"
               value={loginCode}
               onChange={(e) => setLoginCode(e.target.value)}
             />
@@ -103,13 +102,13 @@ export default function Home() {
         </div>
       )}
 
-      {/* --- ৩. Swiper.js ব্যানার (হাত দিয়ে সোয়াইপ হবে) --- */}
+      {/* --- স্লাইডার (অটোমেটিক ও হাত দিয়ে টানা যাবে) --- */}
       <section className="mt-4 px-4">
         <Swiper
           modules={[Autoplay, Pagination]}
           spaceBetween={10}
           slidesPerView={1}
-          autoplay={{ delay: 5000 }}
+          autoplay={{ delay: 5000, disableOnInteraction: false }}
           pagination={{ clickable: true }}
           className="rounded-2xl overflow-hidden h-[240px] md:h-[450px] border border-white/5"
         >
@@ -144,8 +143,10 @@ export default function Home() {
               </div>
 
               <Swiper
+                modules={[Autoplay]}
                 spaceBetween={12}
                 slidesPerView={2.3}
+                autoplay={{ delay: 4000, disableOnInteraction: false }}
                 breakpoints={{ 640: { slidesPerView: 4.2 }, 1024: { slidesPerView: 6.2 } }}
                 className="pb-4"
               >
@@ -163,7 +164,7 @@ export default function Home() {
                 ))}
               </Swiper>
 
-              {/* বিজ্ঞাপন সেট করা (Native Banner) */}
+              {/* বিজ্ঞাপন জোন */}
               {idx === 1 && (
                 <div className="my-8 flex justify-center border-y border-white/5 py-6">
                    <div id="container-c71fa39abdc2a4ee82cc5f9d2a8b5e05"></div>
@@ -174,9 +175,8 @@ export default function Home() {
         })}
       </div>
 
-      {/* Social Bar & Footer Ads - স্ক্রিপ্টগুলো অটোমেটিক কাজ করবে */}
       <script src="https://pl28595065.effectivegatecpm.com/34/95/5d/34955d11745783891e5e1882f225e510.js" async></script>
     </div>
   );
-    }
-            
+      }
+        
