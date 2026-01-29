@@ -131,7 +131,7 @@ export default function Home() {
               onClick={() => setIsMenuOpen(false)}
               className="block text-sm normal-case text-gray-400 font-bold"
             >
-              hasanvai4231@gmail.com
+             Contact Us
             </Link>
           </div>
         </div>
